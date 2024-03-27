@@ -6,7 +6,7 @@ library(ggfortify)
 
 # Read in the data.
 
-jesus <- read.csv("C:/Users/ochoc/Downloads/Poli 202 quiz_March 27, 2024_11.44.csv", header = T)
+jesus <- read.csv("Poli 202 quiz_March 27, 2024_11.44.csv", header = T)
 
 # Clean Data
 
