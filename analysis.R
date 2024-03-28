@@ -144,3 +144,9 @@ ggplot(data = predictions, aes(color = names, shape = names)) +
   theme_bw() +
   theme(legend.position = "none")
 
+one <- c(0, 1, -1, 0)
+two <- c(0,0, 1, -1)
+three <- rbind(one, two)
+
+
+multcomp::glht(m2, linfct = one)
