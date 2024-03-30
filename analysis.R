@@ -138,7 +138,7 @@ predictions
 
 ggplot(data = predictions, aes(color = names, shape = names)) +
   geom_point(aes(x = median, y = names), size = 5) +
-  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
+  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 2) +
   labs(title = "Effect of Treatment on Test Duration", x = "Effect Size", y = "") +
   geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
   theme_bw() +
@@ -171,7 +171,7 @@ predictions
 
 ggplot(data = predictions, aes(color = names, shape = names)) +
   geom_point(aes(x = median, y = names), size = 5) +
-  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
+  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 2) +
   labs(title = "Effect of Treatment on Test Score", x = "Effect Size", y = "") +
   geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
   theme_bw() +
