@@ -137,16 +137,44 @@ predictions
 
 
 ggplot(data = predictions, aes(color = names, shape = names)) +
-  geom_point(aes(x = median, y = names)) +
-  geom_linerange(aes(xmin = lower, xmax = upper, y = names)) +
-  labs(title = "Effect of Treatment on Duration") +
-  geom_vline(xintercept = 0, color = "grey") +
+  geom_point(aes(x = median, y = names), size = 5) +
+  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
+  labs(title = "Effect of Treatment on Test Duration", x = "Effect Size", y = "") +
+  geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
   theme_bw() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  theme(axis.title.x = element_text(size = 30), axis.text = element_text(size = 30), plot.title = element_text(size = 40)) +
+  scale_color_manual(values = c("gold","#7851A9", "#6699CC"))
 
-one <- c(0, 1, -1, 0)
-two <- c(0,0, 1, -1)
-three <- rbind(one, two)
+#### For insig results
+
+m4 <- stan_glm(sum ~ treat, data = jesus_final, refresh = 0)
+
+new <- data.frame(treat = c("Control", "Christ", "Professor", "Stock"))
+
+pred_mat <- posterior_linpred(m4, newdata = new)
+
+predictions <- matrix(NA, nrow = 3, ncol = 3)
+holder <- matrix(NA, nrow = 4000, ncol = 3)
+for (i in 1:3) {
+  holder[,i] <- pred_mat[,i+1] - pred_mat[,1]
+  predictions[i,] <- quantile(holder[,i], c(.025, .5, .975))
+}
+
+names <- c("Christ", "Professor", "Stock")
+colnames(predictions) <- c("lower", "median", "upper")
+predictions <- cbind(predictions, names) %>%
+  as.data.frame() %>%
+  mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper))
+predictions
 
 
-multcomp::glht(m2, linfct = one)
+ggplot(data = predictions, aes(color = names, shape = names)) +
+  geom_point(aes(x = median, y = names), size = 5) +
+  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
+  labs(title = "Effect of Treatment on Test Score", x = "Effect Size", y = "") +
+  geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  theme(axis.title.x = element_text(size = 30), axis.text = element_text(size = 30), plot.title = element_text(size = 40)) +
+  scale_color_manual(values = c("gold","#7851A9", "#6699CC"))
