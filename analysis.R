@@ -187,5 +187,6 @@ ggplot(data = jesus_final, aes(x = sum)) +
   geom_histogram(binwidth = 1, color = "white", fill = "#7851A9") +
   theme_bw() +
   labs(title = "Histogram of Scores", y = "Frequency", x = "Scores") +
-  theme(axis.title = element_text(size = 25), axis.text = element_text(size = 25), plot.title = element_text(size = 35), strip.text = element_text(size = 25), strip.background = element_blank())
+  theme(axis.title = element_text(size = 25), axis.text = element_text(size = 25), plot.title = element_text(size = 35), strip.text = element_text(size = 25), strip.background = element_blank()) +
+  scale_x_continuous(breaks = c(0,2,4,6,8,10))
 
