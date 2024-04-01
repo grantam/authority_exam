@@ -113,7 +113,7 @@ power.anova.test(groups = 4, power = .8, between.var = .75, within.var = 4, sig.
 
 power.anova.test(groups = 4, n = 25, between.var = .9, within.var = 3.75, sig.level = .05)
 
-# Inferential figures
+# Poster Viz
 
 m3 <- stan_glm(logtime ~ treat, data = jesus_final, refresh = 0)
 
@@ -132,49 +132,46 @@ names <- c("Christ", "Professor", "Stock")
 colnames(predictions) <- c("lower", "median", "upper")
 predictions <- cbind(predictions, names) %>%
   as.data.frame() %>%
-  mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper))
+  mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper), g = "Time")
 predictions
-
-
-ggplot(data = predictions, aes(color = names, shape = names)) +
-  geom_point(aes(x = median, y = names), size = 5) +
-  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
-  labs(title = "Effect of Treatment on Test Duration", x = "Effect Size", y = "") +
-  geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
-  theme_bw() +
-  theme(legend.position = "none") +
-  theme(axis.title.x = element_text(size = 30), axis.text = element_text(size = 30), plot.title = element_text(size = 40)) +
-  scale_color_manual(values = c("gold","#7851A9", "#6699CC"))
-
-#### For insig results
 
 m4 <- stan_glm(sum ~ treat, data = jesus_final, refresh = 0)
 
 new <- data.frame(treat = c("Control", "Christ", "Professor", "Stock"))
 
-pred_mat <- posterior_linpred(m4, newdata = new)
+pred_mat1 <- posterior_linpred(m4, newdata = new)
 
-predictions <- matrix(NA, nrow = 3, ncol = 3)
-holder <- matrix(NA, nrow = 4000, ncol = 3)
+predictions1 <- matrix(NA, nrow = 3, ncol = 3)
+holder1 <- matrix(NA, nrow = 4000, ncol = 3)
 for (i in 1:3) {
-  holder[,i] <- pred_mat[,i+1] - pred_mat[,1]
-  predictions[i,] <- quantile(holder[,i], c(.025, .5, .975))
+  holder1[,i] <- pred_mat1[,i+1] - pred_mat1[,1]
+  predictions1[i,] <- quantile(holder1[,i], c(.025, .5, .975))
 }
 
 names <- c("Christ", "Professor", "Stock")
-colnames(predictions) <- c("lower", "median", "upper")
-predictions <- cbind(predictions, names) %>%
+colnames(predictions1) <- c("lower", "median", "upper")
+predictions1 <- cbind(predictions1, names) %>%
   as.data.frame() %>%
-  mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper))
-predictions
+  mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper), g = "Score")
+predictions1
+
+preds <- rbind(predictions, predictions1)
 
 
-ggplot(data = predictions, aes(color = names, shape = names)) +
-  geom_point(aes(x = median, y = names), size = 5) +
-  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 1) +
+ggplot(data = preds, aes(color = names, shape = g, group = g)) +
+  geom_point(aes(x = median, y = names), size = 6) +
+  geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 2) +
   labs(title = "Effect of Treatment on Test Score", x = "Effect Size", y = "") +
-  geom_vline(xintercept = 0, color = "grey", linewidth = 1) +
+  geom_vline(xintercept = 0, color = "grey", linewidth = 1.5) +
   theme_bw() +
   theme(legend.position = "none") +
-  theme(axis.title.x = element_text(size = 30), axis.text = element_text(size = 30), plot.title = element_text(size = 40)) +
-  scale_color_manual(values = c("gold","#7851A9", "#6699CC"))
+  theme(axis.title.x = element_text(size = 25), axis.text = element_text(size = 25), plot.title = element_text(size = 35), strip.text = element_text(size = 25), strip.background = element_blank()) +
+  scale_color_manual(values = c("gold","#7851A9", "#6699CC")) +
+  facet_wrap(~g)
+
+ggplot(data = jesus_final, aes(x = sum)) +
+  geom_histogram(binwidth = 1, color = "white", fill = "#7851A9") +
+  theme_bw() +
+  labs(title = "Histogram of Scores", y = "Frequency", x = "Scores") +
+  theme(axis.title = element_text(size = 25), axis.text = element_text(size = 25), plot.title = element_text(size = 35), strip.text = element_text(size = 25), strip.background = element_blank())
+
