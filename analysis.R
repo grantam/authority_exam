@@ -135,8 +135,6 @@ predictions <- cbind(predictions, names) %>%
   mutate(lower = as.double(lower), median = as.double(median), upper = as.double(upper), g = "Time")
 predictions
 
-<<<<<<< HEAD
-=======
 
 ggplot(data = predictions, aes(color = names, shape = names)) +
   geom_point(aes(x = median, y = names), size = 5) +
@@ -150,7 +148,6 @@ ggplot(data = predictions, aes(color = names, shape = names)) +
 
 #### For insig results
 
->>>>>>> 3ceea34324641e7d0468bb1897fa5b15a1edab41
 m4 <- stan_glm(sum ~ treat, data = jesus_final, refresh = 0)
 
 new <- data.frame(treat = c("Control", "Christ", "Professor", "Stock"))
@@ -174,13 +171,9 @@ predictions1
 preds <- rbind(predictions, predictions1)
 
 
-<<<<<<< HEAD
+
 ggplot(data = preds, aes(color = names, shape = g, group = g)) +
   geom_point(aes(x = median, y = names), size = 6) +
-=======
-ggplot(data = predictions, aes(color = names, shape = names)) +
-  geom_point(aes(x = median, y = names), size = 5) +
->>>>>>> 3ceea34324641e7d0468bb1897fa5b15a1edab41
   geom_linerange(aes(xmin = lower, xmax = upper, y = names), linewidth = 2) +
   labs(title = "Effect of Treatment on Test Score", x = "Effect Size", y = "") +
   geom_vline(xintercept = 0, color = "grey", linewidth = 1.5) +
