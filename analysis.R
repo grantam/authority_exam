@@ -48,7 +48,7 @@ jesus_final$treat <- relevel(jesus_final$treat, ref = "Control")
 
 jesus_final$netted <- tolower(jesus_final$netted)
 
-write.csv(jesus_final, file = "jesus_final.cvs", row.names = F)
+write.csv(jesus_final, file = "jesus_final.csv", row.names = F)
 
 
 pre <- read.csv("C:/Users/ochoc/Downloads/Pre-Survey Responses_March 26, 2024_17.58.csv", header = T) %>%
